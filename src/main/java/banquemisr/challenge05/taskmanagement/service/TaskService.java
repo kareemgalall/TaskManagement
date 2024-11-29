@@ -15,4 +15,6 @@ public interface TaskService {
     TaskEntity partialUpdateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException;
 
     List<TaskEntity> getAllTasks();
+
+    void deleteTask(Long id) throws TaskNotFoundException;
 }

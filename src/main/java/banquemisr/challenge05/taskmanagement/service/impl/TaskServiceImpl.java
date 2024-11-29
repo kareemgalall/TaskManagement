@@ -56,4 +56,13 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskEntity> getAllTasks() {
         return taskRepository.findAll();
     }
+
+    @Override
+    public void deleteTask(Long id) throws TaskNotFoundException {
+        if(!taskRepository.existsById(id))
+        {
+            throw new TaskNotFoundException("task not found");
+        }
+        taskRepository.deleteById(id);
+    }
 }
