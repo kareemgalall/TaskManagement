@@ -5,6 +5,9 @@ import banquemisr.challenge05.taskmanagement.dto.TaskDto;
 import banquemisr.challenge05.taskmanagement.dto.UserDto;
 import banquemisr.challenge05.taskmanagement.mapper.Mapper;
 import banquemisr.challenge05.taskmanagement.service.TaskService;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
+import org.hibernate.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 public class TaskController {
@@ -23,13 +28,13 @@ public class TaskController {
         this.mapper = mapper;
     }
     @PostMapping("/tasks/")
-    public ResponseEntity<TaskDto>createTask(@RequestBody TaskDto taskDto){
-        TaskEntity taskEntity=mapper.mapTo(taskDto);
-        TaskEntity savedTask=taskService.createTask(taskEntity);
-        return new ResponseEntity<>(mapper.mapFrom(savedTask),HttpStatus.CREATED);
+    public ResponseEntity<TaskDto>createTask(@Valid @RequestBody TaskDto taskDto){
+
+        TaskEntity taskEntity = mapper.mapTo(taskDto);
+
+        TaskEntity savedTask = taskService.createTask(taskEntity);
+        return new ResponseEntity<>(mapper.mapFrom(savedTask), HttpStatus.CREATED);
+
     }
-    @GetMapping("/hello")
-    public ResponseEntity<String>hello(){
-        return new ResponseEntity<>("Hello World",HttpStatus.OK);
-    }
+    
 }
