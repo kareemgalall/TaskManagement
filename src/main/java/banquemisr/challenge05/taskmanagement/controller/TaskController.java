@@ -10,16 +10,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 public class TaskController {
     private Mapper<TaskEntity, TaskDto> mapper;
     private TaskService taskService;
+
     public TaskController(Mapper<TaskEntity, TaskDto> mapper, TaskService taskService) {
         this.taskService = taskService;
         this.mapper = mapper;
     }
+
     @PostMapping("/tasks/")
-    public ResponseEntity<TaskDto>createTask(@Valid @RequestBody TaskDto taskDto){
+    public ResponseEntity<TaskDto> createTask(@Valid @RequestBody TaskDto taskDto) {
 
         TaskEntity taskEntity = mapper.mapTo(taskDto);
 
@@ -30,8 +35,15 @@ public class TaskController {
 
     @GetMapping("tasks/{id}")
     public ResponseEntity<TaskDto> findById(@PathVariable Long id) throws TaskNotFoundException {
-        TaskEntity foundTask=taskService.findById(id);
+        TaskEntity foundTask = taskService.findById(id);
         return new ResponseEntity<>(mapper.mapFrom(foundTask), HttpStatus.OK);
+    }
+
+    @GetMapping("/tasks")
+    public List<TaskDto> getAllTasks() {
+        return taskService.getAllTasks().stream()
+                .map(mapper::mapFrom)
+                .collect(Collectors.toList());
     }
 
     @PutMapping("/tasks/{id}")
@@ -44,7 +56,8 @@ public class TaskController {
     @PatchMapping("/tasks/{id}")
     public ResponseEntity<TaskDto> partialUpdateTask(@PathVariable Long id, @Valid @RequestBody TaskDto taskDto) throws TaskNotFoundException {
         TaskEntity taskEntity = mapper.mapTo(taskDto);
-        TaskEntity savedTask=taskService.partialUpdateTask(id,taskEntity);
+        TaskEntity savedTask = taskService.partialUpdateTask(id, taskEntity);
         return new ResponseEntity<>(mapper.mapFrom(savedTask), HttpStatus.OK);
     }
+
 }

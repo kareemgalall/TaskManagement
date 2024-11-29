@@ -6,6 +6,7 @@ import banquemisr.challenge05.taskmanagement.repository.TaskRepository;
 import banquemisr.challenge05.taskmanagement.service.TaskService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -49,5 +50,10 @@ public class TaskServiceImpl implements TaskService {
         ).orElseThrow(()->new TaskNotFoundException("task not found"));
         taskEntity1.setId(id);
         return taskRepository.save(taskEntity1);
+    }
+
+    @Override
+    public List<TaskEntity> getAllTasks() {
+        return taskRepository.findAll();
     }
 }
