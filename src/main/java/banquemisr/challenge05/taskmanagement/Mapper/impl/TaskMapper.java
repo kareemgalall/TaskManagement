@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class TaskMapper implements Mapper<TaskEntity, TaskDto> {
     private ModelMapper modelMapper;
-    public TaskMapper(ModelMapper modelMapper) {}
+    public TaskMapper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
     @Override
     public TaskEntity mapTo(TaskDto taskDto) {
         return modelMapper.map(taskDto, TaskEntity.class);
