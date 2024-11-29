@@ -2,20 +2,13 @@ package banquemisr.challenge05.taskmanagement.controller;
 
 import banquemisr.challenge05.taskmanagement.domain.model.TaskEntity;
 import banquemisr.challenge05.taskmanagement.dto.TaskDto;
-import banquemisr.challenge05.taskmanagement.dto.UserDto;
 import banquemisr.challenge05.taskmanagement.exception.TaskNotFoundException;
 import banquemisr.challenge05.taskmanagement.mapper.Mapper;
 import banquemisr.challenge05.taskmanagement.service.TaskService;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
-import org.hibernate.ObjectNotFoundException;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 public class TaskController {
@@ -40,5 +33,11 @@ public class TaskController {
         TaskEntity foundTask=taskService.findById(id);
         return new ResponseEntity<>(mapper.mapFrom(foundTask), HttpStatus.OK);
     }
-    
+
+    @PutMapping("/tasks/{id}")
+    public ResponseEntity<TaskDto> fullUpdateTask(@PathVariable Long id, @Valid @RequestBody TaskDto taskDto) throws TaskNotFoundException {
+        TaskEntity taskEntity = mapper.mapTo(taskDto);
+        taskService.fullUpdateTask(id, taskEntity);
+        return new ResponseEntity<>(mapper.mapFrom(taskEntity), HttpStatus.OK);
+    }
 }

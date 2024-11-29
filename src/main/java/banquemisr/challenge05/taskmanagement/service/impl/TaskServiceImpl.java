@@ -24,4 +24,14 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException("Task not found with id: " + id));
     }
+
+    @Override
+    public TaskEntity fullUpdateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException {
+        if(!taskRepository.existsById(id))
+        {
+            throw new TaskNotFoundException("Task not found with id: " + id);
+        }
+        taskEntity.setId(id);
+        return taskRepository.save(taskEntity);
+    }
 }

@@ -7,4 +7,6 @@ public interface TaskService {
     public TaskEntity createTask(TaskEntity task);
 
     TaskEntity findById(Long id) throws TaskNotFoundException;
+
+    TaskEntity fullUpdateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException;
 }
