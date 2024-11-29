@@ -34,4 +34,20 @@ public class TaskServiceImpl implements TaskService {
         taskEntity.setId(id);
         return taskRepository.save(taskEntity);
     }
+
+    @Override
+    public TaskEntity partialUpdateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException {
+        TaskEntity taskEntity1= taskRepository.findById(id).map(
+                existingTask -> {
+                    Optional.ofNullable(taskEntity.getTitle()).ifPresent(existingTask::setTitle);
+                    Optional.ofNullable(taskEntity.getDescription()).ifPresent(existingTask::setDescription);
+                    Optional.ofNullable(taskEntity.getDueDate()).ifPresent(existingTask::setDueDate);
+                    Optional.ofNullable(taskEntity.getPriority()).ifPresent(existingTask::setPriority);
+                    Optional.ofNullable(taskEntity.getStatus()).ifPresent(existingTask::setStatus);
+                    return existingTask;
+                }
+        ).orElseThrow(()->new TaskNotFoundException("task not found"));
+        taskEntity1.setId(id);
+        return taskRepository.save(taskEntity1);
+    }
 }

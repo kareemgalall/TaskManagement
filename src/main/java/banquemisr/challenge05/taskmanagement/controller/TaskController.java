@@ -40,4 +40,11 @@ public class TaskController {
         taskService.fullUpdateTask(id, taskEntity);
         return new ResponseEntity<>(mapper.mapFrom(taskEntity), HttpStatus.OK);
     }
+
+    @PatchMapping("/tasks/{id}")
+    public ResponseEntity<TaskDto> partialUpdateTask(@PathVariable Long id, @Valid @RequestBody TaskDto taskDto) throws TaskNotFoundException {
+        TaskEntity taskEntity = mapper.mapTo(taskDto);
+        TaskEntity savedTask=taskService.partialUpdateTask(id,taskEntity);
+        return new ResponseEntity<>(mapper.mapFrom(savedTask), HttpStatus.OK);
+    }
 }

@@ -9,4 +9,6 @@ public interface TaskService {
     TaskEntity findById(Long id) throws TaskNotFoundException;
 
     TaskEntity fullUpdateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException;
+
+    TaskEntity partialUpdateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException;
 }
