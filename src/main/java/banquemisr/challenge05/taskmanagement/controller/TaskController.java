@@ -12,10 +12,12 @@ import banquemisr.challenge05.taskmanagement.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -84,8 +86,13 @@ public class TaskController {
    }
 
    @GetMapping("/tasks/search")
-    public ResponseEntity<List<TaskDto>> searchTask(@RequestParam String query) throws TaskNotFoundException {
-       List<TaskEntity> tasks = taskService.searchTasks(query);
+   public ResponseEntity<List<TaskDto>> searchTasks(
+           @RequestParam(required = false) String title,
+           @RequestParam(required = false) String description,
+           @RequestParam(required = false) String status,
+           @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dueDate
+   ) {
+       List<TaskEntity> tasks = taskService.searchTasks(title, description, status, dueDate);
 
        // Map the results to DTOs
        List<TaskDto> taskDtos = tasks.stream()

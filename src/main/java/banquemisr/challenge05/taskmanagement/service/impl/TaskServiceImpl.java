@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -114,12 +115,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskEntity> searchTasks(String query) {
+    public List<TaskEntity> searchTasks(String title, String description, String status, Date dueDate) {
+        // Get the currently authenticated user's ID
         Long userId = userUtilityService.getAuthenticatedUserId();
 
         // Call the repository method to search tasks
-        return taskRepository.searchTasksByUserAndKeyword(userId, query);
-
+        return taskRepository.searchTasks(userId, title, description, status, dueDate);
     }
 
     private void moveToHistory(TaskEntity task) {
