@@ -26,21 +26,21 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping("admin/users/{id}")
+    @GetMapping("/admin/users/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable long id) throws UserNotFoundException {
         UserEntity foundUser=adminService.findById(id);
         UserDto userDto=modelMapper.mapFrom(foundUser);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
-    @GetMapping("admin/users")
+    @GetMapping("/admin/users")
     public Page<UserDto> getAllUsers(Pageable pageable,@RequestParam(defaultValue = "0") int page,
                                      @RequestParam(defaultValue = "10") int size) {
        return adminService.getAllUsers(pageable)
                 .map(modelMapper::mapFrom);
     }
 
-    @DeleteMapping("admin/users/{id}")
+    @DeleteMapping("/admin/users/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable long id) throws UserNotFoundException {
          userService.deleteUser(id);
          return new ResponseEntity<>("User deleted", HttpStatus.OK);
