@@ -3,6 +3,7 @@ package banquemisr.challenge05.taskmanagement.controller;
 import banquemisr.challenge05.taskmanagement.domain.model.TaskEntity;
 import banquemisr.challenge05.taskmanagement.dto.TaskDto;
 import banquemisr.challenge05.taskmanagement.exception.TaskNotFoundException;
+import banquemisr.challenge05.taskmanagement.exception.UserNotFoundException;
 import banquemisr.challenge05.taskmanagement.mapper.Mapper;
 import banquemisr.challenge05.taskmanagement.service.TaskService;
 import jakarta.validation.Valid;
@@ -24,7 +25,7 @@ public class TaskController {
     }
 
     @PostMapping("/tasks/")
-    public ResponseEntity<TaskDto> createTask(@Valid @RequestBody TaskDto taskDto) {
+    public ResponseEntity<TaskDto> createTask(@Valid @RequestBody TaskDto taskDto) throws UserNotFoundException {
 
         TaskEntity taskEntity = mapper.mapTo(taskDto);
 

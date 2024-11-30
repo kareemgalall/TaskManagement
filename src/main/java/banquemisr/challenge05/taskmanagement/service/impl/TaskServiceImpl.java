@@ -1,9 +1,15 @@
 package banquemisr.challenge05.taskmanagement.service.impl;
 
 import banquemisr.challenge05.taskmanagement.domain.model.TaskEntity;
+import banquemisr.challenge05.taskmanagement.domain.model.UserEntity;
 import banquemisr.challenge05.taskmanagement.exception.TaskNotFoundException;
+import banquemisr.challenge05.taskmanagement.exception.UserNotFoundException;
 import banquemisr.challenge05.taskmanagement.repository.TaskRepository;
+import banquemisr.challenge05.taskmanagement.repository.UserRepository;
 import banquemisr.challenge05.taskmanagement.service.TaskService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,11 +18,18 @@ import java.util.Optional;
 @Service
 public class TaskServiceImpl implements TaskService {
     TaskRepository taskRepository;
-    public TaskServiceImpl(TaskRepository taskRepository) {
+    UserRepository userRepository;
+    public TaskServiceImpl(TaskRepository taskRepository, UserRepository userRepository) {
         this.taskRepository = taskRepository;
+        this.userRepository=userRepository;
     }
     @Override
-    public TaskEntity createTask(TaskEntity task) {
+    public TaskEntity createTask(TaskEntity task) throws UserNotFoundException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email=auth.getPrincipal().toString();
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("user not found"));
+        task.setUser(user);
         return taskRepository.save(task);
     }
 
