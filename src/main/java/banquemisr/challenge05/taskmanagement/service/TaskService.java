@@ -4,6 +4,8 @@ import banquemisr.challenge05.taskmanagement.domain.model.TaskEntity;
 import banquemisr.challenge05.taskmanagement.exception.AuthorizationException;
 import banquemisr.challenge05.taskmanagement.exception.TaskNotFoundException;
 import banquemisr.challenge05.taskmanagement.exception.UserNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ public interface TaskService {
 
     TaskEntity partialUpdateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException;
 
-    List<TaskEntity> getAllTasks();
+    Page<TaskEntity> getAllTasks(Pageable pageable) throws UserNotFoundException;
 
     void deleteTask(Long id) throws TaskNotFoundException, AuthorizationException;
 }

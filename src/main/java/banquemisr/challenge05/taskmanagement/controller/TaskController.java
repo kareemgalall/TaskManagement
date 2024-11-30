@@ -8,6 +8,8 @@ import banquemisr.challenge05.taskmanagement.exception.UserNotFoundException;
 import banquemisr.challenge05.taskmanagement.mapper.Mapper;
 import banquemisr.challenge05.taskmanagement.service.TaskService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,10 +44,9 @@ public class TaskController {
     }
 
     @GetMapping("/tasks/")
-    public List<TaskDto> getAllTasks() {
-        return taskService.getAllTasks().stream()
-                .map(mapper::mapFrom)
-                .collect(Collectors.toList());
+    public Page<TaskDto> getAllTasks(Pageable pageable) throws UserNotFoundException {
+        return taskService.getAllTasks(pageable)
+                .map(mapper::mapFrom);
     }
 
     @PutMapping("/tasks/{id}")

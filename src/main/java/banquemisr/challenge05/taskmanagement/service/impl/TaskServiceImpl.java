@@ -9,6 +9,8 @@ import banquemisr.challenge05.taskmanagement.repository.TaskRepository;
 import banquemisr.challenge05.taskmanagement.repository.UserRepository;
 import banquemisr.challenge05.taskmanagement.service.TaskService;
 import banquemisr.challenge05.taskmanagement.service.UserUtilityService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -70,8 +72,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskEntity> getAllTasks() {
-        return taskRepository.findAll();
+    public Page<TaskEntity> getAllTasks(Pageable pageable) throws UserNotFoundException {
+        Long userId=userUtilityService.getAuthenticatedUserId();
+        UserEntity user=userRepository.findById(userId).orElseThrow(
+                ()->new UserNotFoundException("user not found")
+        );
+        return taskRepository.findByUser(user,pageable);
     }
 
     @Override
