@@ -75,11 +75,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void deleteTask(Long id) throws TaskNotFoundException {
-        if(!taskRepository.existsById(id))
-        {
-            throw new TaskNotFoundException("task not found");
-        }
+    public void deleteTask(Long id) throws TaskNotFoundException, AuthorizationException {
+        TaskEntity existingTask = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("Task not found with id: " + id));
+        authorizationCheck(existingTask);
         taskRepository.deleteById(id);
     }
 

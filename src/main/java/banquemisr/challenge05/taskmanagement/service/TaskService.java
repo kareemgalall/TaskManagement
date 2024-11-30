@@ -18,5 +18,5 @@ public interface TaskService {
 
     List<TaskEntity> getAllTasks();
 
-    void deleteTask(Long id) throws TaskNotFoundException;
+    void deleteTask(Long id) throws TaskNotFoundException, AuthorizationException;
 }
