@@ -1,6 +1,7 @@
 package banquemisr.challenge05.taskmanagement.service;
 
 import banquemisr.challenge05.taskmanagement.domain.model.TaskEntity;
+import banquemisr.challenge05.taskmanagement.exception.AuthorizationException;
 import banquemisr.challenge05.taskmanagement.exception.TaskNotFoundException;
 import banquemisr.challenge05.taskmanagement.exception.UserNotFoundException;
 
@@ -11,7 +12,7 @@ public interface TaskService {
 
     TaskEntity findById(Long id) throws TaskNotFoundException;
 
-    TaskEntity fullUpdateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException;
+    TaskEntity fullUpdateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException, AuthorizationException;
 
     TaskEntity partialUpdateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException;
 

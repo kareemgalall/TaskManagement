@@ -2,6 +2,7 @@ package banquemisr.challenge05.taskmanagement.controller;
 
 import banquemisr.challenge05.taskmanagement.domain.model.TaskEntity;
 import banquemisr.challenge05.taskmanagement.dto.TaskDto;
+import banquemisr.challenge05.taskmanagement.exception.AuthorizationException;
 import banquemisr.challenge05.taskmanagement.exception.TaskNotFoundException;
 import banquemisr.challenge05.taskmanagement.exception.UserNotFoundException;
 import banquemisr.challenge05.taskmanagement.mapper.Mapper;
@@ -48,7 +49,7 @@ public class TaskController {
     }
 
     @PutMapping("/tasks/{id}")
-    public ResponseEntity<TaskDto> fullUpdateTask(@PathVariable Long id, @Valid @RequestBody TaskDto taskDto) throws TaskNotFoundException {
+    public ResponseEntity<TaskDto> fullUpdateTask(@PathVariable Long id, @Valid @RequestBody TaskDto taskDto) throws TaskNotFoundException, AuthorizationException {
         TaskEntity taskEntity = mapper.mapTo(taskDto);
         taskService.fullUpdateTask(id, taskEntity);
         return new ResponseEntity<>(mapper.mapFrom(taskEntity), HttpStatus.OK);
