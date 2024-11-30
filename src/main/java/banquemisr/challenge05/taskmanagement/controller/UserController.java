@@ -44,4 +44,11 @@ public class UserController {
         UserEntity updatedUser = userService.fullUpdate(id,userEntity);
         return new ResponseEntity<>(modelMapper.mapFrom(updatedUser), HttpStatus.OK);
     }
+
+    @PatchMapping("/users/{id}")
+    public ResponseEntity<UserDto>partialUpdate(@PathVariable("id") Long id, @RequestBody UserDto userDto) throws UserNotFoundException, PasswordInCorrectException, AuthorizationException {
+        UserEntity userEntity=modelMapper.mapTo(userDto);
+        UserEntity updatedUser=userService.partialUpdate(id,userEntity);
+        return new ResponseEntity<>(modelMapper.mapFrom(updatedUser), HttpStatus.OK);
+    }
 }

@@ -17,5 +17,5 @@ public interface UserService {
 
     void deleteUser(long id) throws UserNotFoundException;
 
-    UserEntity partialUpdate(Long id, UserEntity userEntity) throws UserNotFoundException;
+    UserEntity partialUpdate(Long id, UserEntity userEntity) throws UserNotFoundException, PasswordInCorrectException, AuthorizationException;
 }

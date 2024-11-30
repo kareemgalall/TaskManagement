@@ -88,10 +88,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity partialUpdate(Long id, UserEntity userEntity) throws UserNotFoundException {
-        UserEntity existingUser=userRepository.findById(id).
-                orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
-        return null;
+    public UserEntity partialUpdate(Long id, UserEntity userEntity)
+            throws UserNotFoundException, PasswordInCorrectException, AuthorizationException {
+
+        Long authenticatedUserId = userUtilityService.getAuthenticatedUserId();
+
+        // Check if the authenticated user matches the requested ID
+        if (!authenticatedUserId.equals(id)) {
+            throw new AuthorizationException("You do not have the access to update this user.");
+        }
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
+
+        if (userEntity.getEmail() != null) {
+            user.setEmail(userEntity.getEmail());
+        }
+        if (userEntity.getName() != null) {
+            user.setName(userEntity.getName());
+        }
+        if (userEntity.getPassword() != null) {
+            userUtilityService.verifyPassword(userEntity, user); // Verify old password
+        }
+
+        // Save and return the updated user
+        return userRepository.save(user);
     }
+
 
 }
