@@ -39,7 +39,7 @@ public class TaskController {
         return new ResponseEntity<>(mapper.mapFrom(foundTask), HttpStatus.OK);
     }
 
-    @GetMapping("/tasks")
+    @GetMapping("/tasks/")
     public List<TaskDto> getAllTasks() {
         return taskService.getAllTasks().stream()
                 .map(mapper::mapFrom)
