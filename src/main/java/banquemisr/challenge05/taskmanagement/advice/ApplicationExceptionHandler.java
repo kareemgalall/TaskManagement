@@ -1,5 +1,7 @@
 package banquemisr.challenge05.taskmanagement.advice;
 
+import banquemisr.challenge05.taskmanagement.exception.AuthorizationException;
+import banquemisr.challenge05.taskmanagement.exception.PasswordInCorrectException;
 import banquemisr.challenge05.taskmanagement.exception.TaskNotFoundException;
 import banquemisr.challenge05.taskmanagement.exception.UserNotFoundException;
 import jakarta.validation.ConstraintViolationException;
@@ -57,4 +59,21 @@ public class ApplicationExceptionHandler {
         return errorMap;
     }
 
+
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(PasswordInCorrectException.class)
+    public Map<String, String> IllegalArgumentException(PasswordInCorrectException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        String message = ex.getMessage().toLowerCase();
+        errorMap.put("errorMessage", "old password in correct.");
+        return errorMap;
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public Map<String, String> handleAuthorizationException(AuthorizationException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        String message = ex.getMessage().toLowerCase();
+        errorMap.put("errorMessage", ex.getMessage());
+        return errorMap;
+    }
 }

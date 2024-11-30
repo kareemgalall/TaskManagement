@@ -34,14 +34,20 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
                     registry.requestMatchers( "/users/register", "/users/authenticate").permitAll();
-                    registry.requestMatchers("/users/**","/tasks/**").hasRole("USER");
+                    registry.requestMatchers(getUserPatterns()).hasRole("USER");
+                    registry.requestMatchers(getAdminPatterns()).hasRole("ADMIN");
                     registry.anyRequest().authenticated();
                 })
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
+    private String[] getUserPatterns() {
+        return new String[] {"/users/me","/tasks/**","/update/**"};
+    }
+    private String[] getAdminPatterns() {
+        return new String[]{"users/{id}"};
+    }
     @Bean
     public UserDetailsService userDetailsService() {
         return userDetailService;
@@ -63,4 +69,5 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }
