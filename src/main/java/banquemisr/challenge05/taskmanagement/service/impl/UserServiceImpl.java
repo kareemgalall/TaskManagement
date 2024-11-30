@@ -5,6 +5,7 @@ import banquemisr.challenge05.taskmanagement.exception.PasswordInCorrectExceptio
 import banquemisr.challenge05.taskmanagement.exception.UserNotFoundException;
 import banquemisr.challenge05.taskmanagement.repository.UserRepository;
 import banquemisr.challenge05.taskmanagement.service.UserService;
+import banquemisr.challenge05.taskmanagement.service.UserUtilityService;
 import banquemisr.challenge05.taskmanagement.webtoken.JwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,12 +27,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserEntityDetailsService userEntityDetailsService;
-    public UserServiceImpl(AuthenticationManager authenticationManager, JwtService jwtService, UserRepository userRepository, PasswordEncoder passwordEncoder,UserEntityDetailsService userEntityDetailsService) {
+    private final UserUtilityService userUtilityService;
+    public UserServiceImpl(AuthenticationManager authenticationManager, JwtService jwtService, UserRepository userRepository, PasswordEncoder passwordEncoder,UserEntityDetailsService userEntityDetailsService,UserUtilityService userUtilityService) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userEntityDetailsService=userEntityDetailsService;
+        this.userUtilityService=userUtilityService;
     }
 
     public String authenticate(UserEntity userDto) throws UserNotFoundException {
@@ -62,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity fullUpdate(Long id,UserEntity userEntity) throws UserNotFoundException, PasswordInCorrectException, AuthorizationException {
-        Long authenticatedUserId = getAuthenticatedUserId();
+        Long authenticatedUserId = userUtilityService.getAuthenticatedUserId();
         if(!authenticatedUserId.equals(id)){
             throw new AuthorizationException("you dont have the access to this function");
         }
@@ -70,7 +73,7 @@ public class UserServiceImpl implements UserService {
         UserEntity existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
         //check if user sent correct old password
-        verifyPassword(userEntity, existingUser);
+        userUtilityService.verifyPassword(userEntity, existingUser);
         userEntity.setId(id);
         userEntity.setPassword(existingUser.getPassword()); // Keep the old password as-is
         userEntity.setRole("USER");
@@ -84,18 +87,11 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(userEntity);
     }
 
-    private void verifyPassword(UserEntity userEntity, UserEntity existingUser) throws PasswordInCorrectException {
-        if (!passwordEncoder.matches(userEntity.getPassword(), existingUser.getPassword())) {
-            throw new PasswordInCorrectException("Old password is incorrect.");
-        }
+    @Override
+    public UserEntity partialUpdate(Long id, UserEntity userEntity) throws UserNotFoundException {
+        UserEntity existingUser=userRepository.findById(id).
+                orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
+        return null;
     }
 
-    public Long getAuthenticatedUserId() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            String email = auth.getPrincipal().toString();
-            return userRepository.findByEmail(email).get().getId();
-        }
-        throw new SecurityException("User not authenticated or incorrect principal type.");
-    }
 }
