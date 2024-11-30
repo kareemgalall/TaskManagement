@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -110,6 +111,15 @@ public class TaskServiceImpl implements TaskService {
         // Update the task's status if not completed
         task.setStatus(newStatus);
         return taskRepository.save(task);
+    }
+
+    @Override
+    public List<TaskEntity> searchTasks(String query) {
+        Long userId = userUtilityService.getAuthenticatedUserId();
+
+        // Call the repository method to search tasks
+        return taskRepository.searchTasksByUserAndKeyword(userId, query);
+
     }
 
     private void moveToHistory(TaskEntity task) {

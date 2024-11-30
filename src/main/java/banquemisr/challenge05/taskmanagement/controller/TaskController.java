@@ -82,4 +82,17 @@ public class TaskController {
         taskService.changeTaskStatus(id, status);
         return new ResponseEntity<>("status updated", HttpStatus.OK);
    }
+
+   @GetMapping("/tasks/search")
+    public ResponseEntity<List<TaskDto>> searchTask(@RequestParam String query) throws TaskNotFoundException {
+       List<TaskEntity> tasks = taskService.searchTasks(query);
+
+       // Map the results to DTOs
+       List<TaskDto> taskDtos = tasks.stream()
+               .map(mapper::mapFrom)
+               .collect(Collectors.toList());
+
+       return new ResponseEntity<>(taskDtos, HttpStatus.OK);
+
+   }
 }

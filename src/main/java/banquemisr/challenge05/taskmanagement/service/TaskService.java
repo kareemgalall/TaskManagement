@@ -23,4 +23,6 @@ public interface TaskService {
     void deleteTask(Long id) throws TaskNotFoundException, AuthorizationException;
 
     TaskEntity changeTaskStatus(Long id,String newStatus) throws TaskNotFoundException, AuthorizationException;
+
+    List<TaskEntity> searchTasks(String query);
 }
