@@ -6,6 +6,7 @@ import banquemisr.challenge05.taskmanagement.repository.HistoryRepository;
 import banquemisr.challenge05.taskmanagement.repository.UserRepository;
 import banquemisr.challenge05.taskmanagement.service.HistoryService;
 import banquemisr.challenge05.taskmanagement.service.UserUtilityService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,5 +27,11 @@ public class HistoryServiceImpl implements HistoryService {
         Long id=userUtilityService.getAuthenticatedUserId();
         UserEntity userEntity=userRepository.findById(id).get();
         return historyRepository.findByUser(userEntity);
+    }
+    @Transactional
+    @Override
+    public void clearHistory() {
+        Long id=userUtilityService.getAuthenticatedUserId();
+        historyRepository.deleteByUserId(id);
     }
 }

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface HistoryService {
     List<HistoryEntity> getHistory();
+
+    void clearHistory();
 }
