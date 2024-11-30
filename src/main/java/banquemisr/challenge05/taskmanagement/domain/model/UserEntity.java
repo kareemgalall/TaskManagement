@@ -1,9 +1,8 @@
 package banquemisr.challenge05.taskmanagement.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,8 +16,13 @@ public class UserEntity {
     @Id
     @GeneratedValue
     Long id;
+    @NotEmpty(message = "name cannot be empty")
     String name;
+    @Email(message = "email not valid")
+    @Column(unique = true)
+    @NotEmpty(message = "email cannot be empty")
     String email;
+    @NotEmpty(message = "password cannot be empty")
     String password;
     String role;
 }

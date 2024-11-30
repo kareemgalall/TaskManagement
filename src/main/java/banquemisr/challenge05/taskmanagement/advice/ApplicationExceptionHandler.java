@@ -3,6 +3,7 @@ package banquemisr.challenge05.taskmanagement.advice;
 import banquemisr.challenge05.taskmanagement.exception.TaskNotFoundException;
 import banquemisr.challenge05.taskmanagement.exception.UserNotFoundException;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -39,6 +40,20 @@ public class ApplicationExceptionHandler {
     public Map<String, String> handleUserNotFoundException(TaskNotFoundException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("errorMessage", ex.getMessage());
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public Map<String, String> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        String message = ex.getMessage().toLowerCase();
+        if (message.contains("email")&&message.contains("unique")) { // Simple check for the word "unique" in the error message
+            errorMap.put("errorMessage", "Email already exists. Please use another email.");
+        } else {
+            errorMap.put("errorMessage", ex.getMessage());
+        }
+
         return errorMap;
     }
 
