@@ -2,6 +2,8 @@ package banquemisr.challenge05.taskmanagement.controller;
 
 import banquemisr.challenge05.taskmanagement.domain.model.UserEntity;
 import banquemisr.challenge05.taskmanagement.dto.UserDto;
+import banquemisr.challenge05.taskmanagement.exception.AuthorizationException;
+import banquemisr.challenge05.taskmanagement.exception.PasswordInCorrectException;
 import banquemisr.challenge05.taskmanagement.exception.UserNotFoundException;
 import banquemisr.challenge05.taskmanagement.mapper.Mapper;
 import banquemisr.challenge05.taskmanagement.service.UserService;
@@ -21,7 +23,7 @@ public class UserController {
     }
 
     @PostMapping("/users/authenticate")
-    public String authenticate(@RequestBody UserEntity userDto) {
+    public String authenticate(@RequestBody UserEntity userDto) throws UserNotFoundException {
         return userService.authenticate(userDto);
     }
 
@@ -30,10 +32,16 @@ public class UserController {
         return userService.register(userDto);
     }
 
-
     @GetMapping("/users/me")
     public ResponseEntity<UserDto>getProfile() throws UserNotFoundException {
         UserEntity currentUser=userService.getProfile();
         return new ResponseEntity<>(modelMapper.mapFrom(currentUser), HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable("id") Long id, @RequestBody UserDto userDto) throws UserNotFoundException, PasswordInCorrectException, AuthorizationException {
+        UserEntity userEntity=modelMapper.mapTo(userDto);
+        UserEntity updatedUser = userService.fullUpdate(id,userEntity);
+        return new ResponseEntity<>(modelMapper.mapFrom(updatedUser), HttpStatus.OK);
     }
 }
