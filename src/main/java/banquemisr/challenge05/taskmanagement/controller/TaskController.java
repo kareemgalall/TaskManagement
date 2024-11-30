@@ -57,7 +57,7 @@ public class TaskController {
     }
 
     @PatchMapping("/tasks/{id}")
-    public ResponseEntity<TaskDto> partialUpdateTask(@PathVariable Long id, @Valid @RequestBody TaskDto taskDto) throws TaskNotFoundException {
+    public ResponseEntity<TaskDto> partialUpdateTask(@PathVariable Long id, @Valid @RequestBody TaskDto taskDto) throws TaskNotFoundException, AuthorizationException {
         TaskEntity taskEntity = mapper.mapTo(taskDto);
         TaskEntity savedTask = taskService.partialUpdateTask(id, taskEntity);
         return new ResponseEntity<>(mapper.mapFrom(savedTask), HttpStatus.OK);

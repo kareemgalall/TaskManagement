@@ -56,19 +56,22 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskEntity partialUpdateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException {
-        TaskEntity taskEntity1= taskRepository.findById(id).map(
-                existingTask -> {
-                    Optional.ofNullable(taskEntity.getTitle()).ifPresent(existingTask::setTitle);
-                    Optional.ofNullable(taskEntity.getDescription()).ifPresent(existingTask::setDescription);
-                    Optional.ofNullable(taskEntity.getDueDate()).ifPresent(existingTask::setDueDate);
-                    Optional.ofNullable(taskEntity.getPriority()).ifPresent(existingTask::setPriority);
-                    Optional.ofNullable(taskEntity.getStatus()).ifPresent(existingTask::setStatus);
-                    return existingTask;
-                }
-        ).orElseThrow(()->new TaskNotFoundException("task not found"));
-        taskEntity1.setId(id);
-        return taskRepository.save(taskEntity1);
+    public TaskEntity partialUpdateTask(Long id, TaskEntity taskEntity)
+            throws TaskNotFoundException, AuthorizationException {
+
+        // Fetch the existing task and verify ownership
+        TaskEntity existingTask = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("Task not found with id: " + id));
+        authorizationCheck(existingTask);
+        // Update the task fields
+        Optional.ofNullable(taskEntity.getTitle()).ifPresent(existingTask::setTitle);
+        Optional.ofNullable(taskEntity.getDescription()).ifPresent(existingTask::setDescription);
+        Optional.ofNullable(taskEntity.getDueDate()).ifPresent(existingTask::setDueDate);
+        Optional.ofNullable(taskEntity.getPriority()).ifPresent(existingTask::setPriority);
+        Optional.ofNullable(taskEntity.getStatus()).ifPresent(existingTask::setStatus);
+        existingTask.setId(id);
+        // Save and return the updated task
+        return taskRepository.save(existingTask);
     }
 
     @Override

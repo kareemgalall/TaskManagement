@@ -16,7 +16,7 @@ public interface TaskService {
 
     TaskEntity fullUpdateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException, AuthorizationException;
 
-    TaskEntity partialUpdateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException;
+    TaskEntity partialUpdateTask(Long id, TaskEntity taskEntity) throws TaskNotFoundException, AuthorizationException;
 
     Page<TaskEntity> getAllTasks(Pageable pageable) throws UserNotFoundException;
 
