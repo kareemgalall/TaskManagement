@@ -1,22 +1,23 @@
 package banquemisr.challenge05.taskmanagement.service.impl;
 
+import banquemisr.challenge05.taskmanagement.domain.model.HistoryEntity;
 import banquemisr.challenge05.taskmanagement.domain.model.TaskEntity;
 import banquemisr.challenge05.taskmanagement.domain.model.UserEntity;
 import banquemisr.challenge05.taskmanagement.exception.AuthorizationException;
 import banquemisr.challenge05.taskmanagement.exception.TaskNotFoundException;
 import banquemisr.challenge05.taskmanagement.exception.UserNotFoundException;
+import banquemisr.challenge05.taskmanagement.repository.HistoryRepository;
 import banquemisr.challenge05.taskmanagement.repository.TaskRepository;
 import banquemisr.challenge05.taskmanagement.repository.UserRepository;
 import banquemisr.challenge05.taskmanagement.service.TaskService;
 import banquemisr.challenge05.taskmanagement.service.UserUtilityService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,10 +25,12 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final UserUtilityService userUtilityService;
-    public TaskServiceImpl(TaskRepository taskRepository, UserRepository userRepository,UserUtilityService userUtilityService) {
+    private final HistoryRepository historyRepository;
+    public TaskServiceImpl(TaskRepository taskRepository, UserRepository userRepository, UserUtilityService userUtilityService, HistoryRepository historyRepository) {
         this.taskRepository = taskRepository;
         this.userRepository=userRepository;
         this.userUtilityService = userUtilityService;
+        this.historyRepository = historyRepository;
     }
     @Override
     public TaskEntity createTask(TaskEntity task) throws UserNotFoundException {
@@ -89,6 +92,38 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new TaskNotFoundException("Task not found with id: " + id));
         authorizationCheck(existingTask);
         taskRepository.deleteById(id);
+    }
+
+    @Override
+    public TaskEntity changeTaskStatus(Long id,String newStatus) throws TaskNotFoundException, AuthorizationException {
+        TaskEntity task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("Task not found with id: " + id));
+        authorizationCheck(task);
+        if ("COMPLETED".equalsIgnoreCase(newStatus)) {
+            // Move the task to the history table
+            moveToHistory(task);
+            // Delete the task from the tasks table
+            taskRepository.delete(task);
+            return null; // Return null since the task is now in history
+        }
+
+        // Update the task's status if not completed
+        task.setStatus(newStatus);
+        return taskRepository.save(task);
+    }
+
+    private void moveToHistory(TaskEntity task) {
+        HistoryEntity historyEntity = HistoryEntity.builder()
+                .title(task.getTitle())
+                .description(task.getDescription())
+                .priority(task.getPriority())
+                .status("COMPLETED")
+                .dueDate(task.getDueDate())
+                .user(task.getUser())
+                .build();
+
+        // Save the history entity
+        historyRepository.save(historyEntity);
     }
 
     private void authorizationCheck(TaskEntity existingTask) throws AuthorizationException {

@@ -21,4 +21,6 @@ public interface TaskService {
     Page<TaskEntity> getAllTasks(Pageable pageable) throws UserNotFoundException;
 
     void deleteTask(Long id) throws TaskNotFoundException, AuthorizationException;
+
+    TaskEntity changeTaskStatus(Long id,String newStatus) throws TaskNotFoundException, AuthorizationException;
 }

@@ -1,11 +1,13 @@
 package banquemisr.challenge05.taskmanagement.controller;
 
+import banquemisr.challenge05.taskmanagement.domain.model.HistoryEntity;
 import banquemisr.challenge05.taskmanagement.domain.model.TaskEntity;
 import banquemisr.challenge05.taskmanagement.dto.TaskDto;
 import banquemisr.challenge05.taskmanagement.exception.AuthorizationException;
 import banquemisr.challenge05.taskmanagement.exception.TaskNotFoundException;
 import banquemisr.challenge05.taskmanagement.exception.UserNotFoundException;
 import banquemisr.challenge05.taskmanagement.mapper.Mapper;
+import banquemisr.challenge05.taskmanagement.repository.TaskRepository;
 import banquemisr.challenge05.taskmanagement.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -15,16 +17,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 public class TaskController {
+    private final TaskRepository taskRepository;
     private Mapper<TaskEntity, TaskDto> mapper;
     private TaskService taskService;
 
-    public TaskController(Mapper<TaskEntity, TaskDto> mapper, TaskService taskService) {
+    public TaskController(Mapper<TaskEntity, TaskDto> mapper, TaskService taskService, TaskRepository taskRepository) {
         this.taskService = taskService;
         this.mapper = mapper;
+        this.taskRepository = taskRepository;
     }
 
     @PostMapping("/tasks/")
@@ -70,4 +75,11 @@ public class TaskController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
+
+    @PutMapping("tasks/{id}/changestatus")
+    public ResponseEntity<String> changeTaskStatus(@PathVariable Long id,@RequestBody Map<String, String> requestBody) throws TaskNotFoundException, AuthorizationException  {
+        String status= requestBody.get("status");
+        taskService.changeTaskStatus(id, status);
+        return new ResponseEntity<>("status updated", HttpStatus.OK);
+   }
 }
