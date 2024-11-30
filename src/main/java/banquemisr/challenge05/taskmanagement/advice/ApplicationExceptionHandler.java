@@ -37,9 +37,8 @@ public class ApplicationExceptionHandler {
         return errorMap;
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(UserNotFoundException.class)
-    public Map<String, String> handleUserNotFoundException(TaskNotFoundException ex) {
+    public Map<String, String> handleUserNotFoundException(UserNotFoundException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("errorMessage", ex.getMessage());
         return errorMap;

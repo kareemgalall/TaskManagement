@@ -6,6 +6,7 @@ import banquemisr.challenge05.taskmanagement.exception.UserNotFoundException;
 import banquemisr.challenge05.taskmanagement.repository.UserRepository;
 import banquemisr.challenge05.taskmanagement.service.UserService;
 import banquemisr.challenge05.taskmanagement.webtoken.JwtService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -74,6 +75,13 @@ public class UserServiceImpl implements UserService {
         userEntity.setPassword(existingUser.getPassword()); // Keep the old password as-is
         userEntity.setRole("USER");
         return userRepository.save(userEntity);
+    }
+
+    @Override
+    public void deleteUser(long id) throws UserNotFoundException {
+        UserEntity userEntity=userRepository.findById(id).
+                orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
+        userRepository.delete(userEntity);
     }
 
     private void verifyPassword(UserEntity userEntity, UserEntity existingUser) throws PasswordInCorrectException {
