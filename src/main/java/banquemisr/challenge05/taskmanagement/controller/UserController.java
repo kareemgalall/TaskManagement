@@ -14,12 +14,12 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/users/authenticate")
     public String authenticate(@RequestBody UserEntity userDto) {
         return userService.authenticate(userDto);
     }
 
-    @PostMapping("/register/user")
+    @PostMapping("/users/register")
     public UserEntity register(@RequestBody UserEntity userDto) {
         return userService.register(userDto);
     }
