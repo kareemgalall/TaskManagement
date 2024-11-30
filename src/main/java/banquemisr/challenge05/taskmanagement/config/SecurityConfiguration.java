@@ -35,15 +35,15 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
                     registry.requestMatchers( "/users/register", "/users/authenticate").permitAll();
-                    registry.requestMatchers(HttpMethod.GET,"/users/{id}").hasRole("ADMIN");
-                    registry.requestMatchers("/users/me","/tasks/**","/users/**").hasRole("USER");
+                    registry.requestMatchers("/admin/users/**").hasRole("ADMIN");
+                    registry.requestMatchers("/tasks/**","/users/**").hasRole("USER");
                     registry.anyRequest().authenticated();
                 })
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-  
+
     @Bean
     public UserDetailsService userDetailsService() {
         return userDetailService;
