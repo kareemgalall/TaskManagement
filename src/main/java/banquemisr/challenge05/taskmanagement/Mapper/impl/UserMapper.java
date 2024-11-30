@@ -7,9 +7,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserMapper implements Mapper<UserEntity, UserDto> {
+public class UserMapper implements Mapper<UserEntity,UserDto> {
     ModelMapper modelMapper;
-    public UserMapper(ModelMapper modelMapper) {}
+    public UserMapper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
     @Override
     public UserEntity mapTo(UserDto userDto) {
         return modelMapper.map(userDto, UserEntity.class);

@@ -1,14 +1,18 @@
 package banquemisr.challenge05.taskmanagement.service.impl;
 import banquemisr.challenge05.taskmanagement.domain.model.UserEntity;
+import banquemisr.challenge05.taskmanagement.exception.UserNotFoundException;
 import banquemisr.challenge05.taskmanagement.repository.UserRepository;
 import banquemisr.challenge05.taskmanagement.service.UserService;
 import banquemisr.challenge05.taskmanagement.webtoken.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -40,6 +44,15 @@ public class UserServiceImpl implements UserService {
         userEntity.setRole("USER");
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         return userRepository.save(userEntity);
+    }
+
+    @Override
+    public UserEntity getProfile() throws UserNotFoundException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email=auth.getPrincipal().toString();
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("user not found"));
+        return user;
     }
 
 }
