@@ -3,6 +3,7 @@ import banquemisr.challenge05.taskmanagement.service.impl.UserEntityDetailsServi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -34,20 +35,15 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
                     registry.requestMatchers( "/users/register", "/users/authenticate").permitAll();
-                    registry.requestMatchers(getUserPatterns()).hasRole("USER");
-                    registry.requestMatchers(getAdminPatterns()).hasRole("ADMIN");
+                    registry.requestMatchers(HttpMethod.GET,"/users/{id}").hasRole("ADMIN");
+                    registry.requestMatchers("/users/me","/tasks/**","/users/**").hasRole("USER");
                     registry.anyRequest().authenticated();
                 })
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-    private String[] getUserPatterns() {
-        return new String[] {"/users/me","/tasks/**","/update/**"};
-    }
-    private String[] getAdminPatterns() {
-        return new String[]{"users/{id}"};
-    }
+  
     @Bean
     public UserDetailsService userDetailsService() {
         return userDetailService;

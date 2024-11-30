@@ -38,7 +38,7 @@ public class UserController {
         return new ResponseEntity<>(modelMapper.mapFrom(currentUser), HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/users/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable("id") Long id, @RequestBody UserDto userDto) throws UserNotFoundException, PasswordInCorrectException, AuthorizationException {
         UserEntity userEntity=modelMapper.mapTo(userDto);
         UserEntity updatedUser = userService.fullUpdate(id,userEntity);
