@@ -1,6 +1,7 @@
 package banquemisr.challenge05.taskmanagement.webtoken;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -35,7 +36,7 @@ public class JwtService {
         return claims.getSubject();
     }
 
-    private Claims getClaims(String jwt) {
+    private Claims getClaims(String jwt) throws ExpiredJwtException {
         return Jwts.parser()
                 .verifyWith(generateKey())
                 .build()

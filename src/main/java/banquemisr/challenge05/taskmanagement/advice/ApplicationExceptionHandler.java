@@ -10,10 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import io.jsonwebtoken.security.SignatureException;
+import org.springframework.http.ProblemDetail;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AccountStatusException;
+import org.springframework.security.authentication.BadCredentialsException;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
@@ -26,6 +30,13 @@ public class ApplicationExceptionHandler {
         ex.getConstraintViolations().forEach(constraintViolation -> {
             errorMap.put(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());
         });
+        return errorMap;
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public Map<String, String> handleAuthorizationException(AuthorizationException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("message", ex.getMessage());
         return errorMap;
     }
 
@@ -63,16 +74,34 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(PasswordInCorrectException.class)
     public Map<String, String> IllegalArgumentException(PasswordInCorrectException ex) {
         Map<String, String> errorMap = new HashMap<>();
-        String message = ex.getMessage().toLowerCase();
         errorMap.put("errorMessage", "old password in correct.");
         return errorMap;
     }
 
-    @ExceptionHandler(AuthorizationException.class)
-    public Map<String, String> handleAuthorizationException(AuthorizationException ex) {
+    @ExceptionHandler(Exception.class)
+    public Map<String, String> handleSecurityException(Exception exception) {
         Map<String, String> errorMap = new HashMap<>();
-        String message = ex.getMessage().toLowerCase();
-        errorMap.put("errorMessage", ex.getMessage());
+
+        if (exception instanceof BadCredentialsException) {
+            errorMap.put("description", "The username or password is incorrect");
+        }
+
+        if (exception instanceof AccountStatusException) {
+            errorMap.put("description", "The account is locked");
+        }
+
+        if (exception instanceof AccessDeniedException) {
+            errorMap.put("description", "You are not authorized to access this resource");
+        }
+
+        if (exception instanceof SignatureException) {
+            errorMap.put("description", "The JWT signature is invalid");
+        }
+
+        if (errorMap == null) {
+            errorMap.put("description", "Unknown internal server error.");
+        }
+
         return errorMap;
     }
 }

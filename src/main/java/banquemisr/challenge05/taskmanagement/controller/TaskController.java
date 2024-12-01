@@ -1,6 +1,5 @@
 package banquemisr.challenge05.taskmanagement.controller;
 
-import banquemisr.challenge05.taskmanagement.domain.model.HistoryEntity;
 import banquemisr.challenge05.taskmanagement.domain.model.TaskEntity;
 import banquemisr.challenge05.taskmanagement.dto.TaskDto;
 import banquemisr.challenge05.taskmanagement.exception.AuthorizationException;
