@@ -1,3 +1,119 @@
+# Task Management System
+
+This guide outlines the steps to run the task management system
+
+---
+
+## Prerequisites
+
+Ensure the following are installed and configured on your system:
+
+1. **Java Development Kit (JDK)**:
+
+   - Version: `17` or later.
+   - Verify installation:
+     ```bash
+     java -version
+     ```
+
+2. **Maven**:
+
+   - Verify installation:
+     ```bash
+     mvn -version
+     ```
+
+3. **Docker & Docker Compose**:
+
+   - Verify Docker installation:
+     ```bash
+     docker --version
+     ```
+   - Verify Docker Compose installation:
+     ```bash
+     docker-compose --version
+     ```
+
+4. **Git**:
+
+   - Verify installation:
+     ```bash
+     git --version
+     ```
+
+---
+
+## Clone the Repository
+
+1. Clone the application repository:
+
+   ```bash
+   git clone <repository_url>
+   ```
+
+   Replace `<repository_url>` with the URL of your GitHub repository.
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd <project_name>
+   ```
+
+
+
+## Run Database Using Docker Compose
+
+1. Start the PostgreSQL database container:
+
+   ```bash
+   docker-compose up -d
+   ```
+
+2. Verify the container is running:
+
+   ```bash
+   docker ps
+   ```
+
+   Ensure a PostgreSQL container is listed and running on port `5432`.
+
+---
+
+## Run the Application
+
+1. Use Maven to run the application:
+
+   ```bash
+   mvn spring-boot:run
+   ```
+
+2. Alternatively, build the project and run the JAR file:
+
+   ```bash
+   mvn clean package
+   java -jar target/<application_name>-<version>.jar
+   ```
+
+   Replace `<application_name>` and `<version>` with the actual JAR file name generated in the `target` directory.
+
+3. Or you can directly it from the ide. 
+
+---
+
+## Access the Application
+
+1. Open a web browser and navigate to:
+
+   ```
+   http://localhost:8080/{api endpoints}
+   api documentation is provided below 
+   ```
+
+2. Verify the application is running and connected to the PostgreSQL database.
+
+---
+
+
 # API Documentation
 
 This document provides an overview of the API endpoints available in the Task Management System. Each endpoint includes its HTTP method, endpoint URL, request parameters, and response details.
