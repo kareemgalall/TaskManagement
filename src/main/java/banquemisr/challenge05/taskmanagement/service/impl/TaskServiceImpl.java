@@ -114,12 +114,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskEntity> searchTasks(String title, String description, String status, Date dueDate) {
+    public List<TaskEntity> searchTasks(String title, String description, String status, Date dueDate,String priority) {
         // Get the currently authenticated user's ID
         Long userId = userUtilityService.getAuthenticatedUserId();
 
         // Call the repository method to search tasks
-        return taskRepository.searchTasks(userId, title, description, status, dueDate);
+        return taskRepository.searchTasks(userId, title, description, status, dueDate,priority);
     }
 
     private void moveToHistory(TaskEntity task) {

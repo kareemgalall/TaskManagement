@@ -20,12 +20,14 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long>, PagingA
             "(LOWER(t.title) LIKE LOWER(CONCAT('%', :title, '%')) OR " +
             "LOWER(t.description) LIKE LOWER(CONCAT('%', :description, '%')) OR " +
             "t.status = :status OR " +
+            "t.priority = :priority OR " +
             "t.dueDate = :dueDate)")
     List<TaskEntity> searchTasks(
             @Param("userId") Long userId,
             @Param("title") String title,
             @Param("description") String description,
             @Param("status") String status,
-            @Param("dueDate") Date dueDate
+            @Param("dueDate") Date dueDate,
+            @Param("priority") String priority
     );
 }

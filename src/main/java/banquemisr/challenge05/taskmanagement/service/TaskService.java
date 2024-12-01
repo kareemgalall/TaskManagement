@@ -25,5 +25,5 @@ public interface TaskService {
 
     TaskEntity changeTaskStatus(Long id,String newStatus) throws TaskNotFoundException, AuthorizationException;
 
-    List<TaskEntity> searchTasks(String title, String description, String status, Date dueDate);
+    List<TaskEntity> searchTasks(String title, String description, String status, Date dueDate,String priority);
 }

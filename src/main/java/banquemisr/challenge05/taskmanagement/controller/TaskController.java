@@ -89,9 +89,10 @@ public class TaskController {
            @RequestParam(required = false) String title,
            @RequestParam(required = false) String description,
            @RequestParam(required = false) String status,
-           @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dueDate
+           @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dueDate,
+           @RequestParam(required = false)String priority
    ) {
-       List<TaskEntity> tasks = taskService.searchTasks(title, description, status, dueDate);
+       List<TaskEntity> tasks = taskService.searchTasks(title, description, status, dueDate,priority);
 
        // Map the results to DTOs
        List<TaskDto> taskDtos = tasks.stream()
