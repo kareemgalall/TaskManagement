@@ -122,194 +122,202 @@ Ensure the following are installed and configured on your system:
 
 # API Documentation
 
-This document provides an overview of the API endpoints available in the Task Management System. Each endpoint includes its HTTP method, endpoint URL, request parameters, and response details.
----
-
 ## AdminController Endpoints
 
-### **Get User by ID**
-- **URL:** `/admin/users/{id}`
-- **Method:** `GET`
-- **Description:** Retrieve a user by their ID.
-- **Path Parameters:**
-  - `id` (long): The ID of the user to retrieve.
-- **Response:**
-  - **200 OK:** User details in JSON format.
+### Get User by ID
+**GET /admin/users/{id}**
+- **Description**: Retrieves a user by their ID.
+- **Path Variables**:
+  - `id` (long): ID of the user to retrieve.
+- **Response**:
+  - `200 OK`: UserDto object containing user details.
+- **Errors**:
+  - `404 Not Found`: User not found.
 
-### **Get All Users**
-- **URL:** `/admin/users`
-- **Method:** `GET`
-- **Description:** Retrieve a paginated list of all users.
-- **Query Parameters:**
-  - `page` (int, optional, default: 0): The page number to retrieve.
-  - `size` (int, optional, default: 10): The number of users per page.
-- **Response:**
-  - **200 OK:** A paginated list of users.
+### Get All Users
+**GET /admin/users**
+- **Description**: Retrieves a paginated list of all users.
+- **Query Parameters**:
+  - `page` (int, optional, default: 0): Page number.
+  - `size` (int, optional, default: 10): Page size.
+- **Response**:
+  - `200 OK`: Paginated list of UserDto objects.
 
-### **Delete User by ID**
-- **URL:** `/admin/users/{id}`
-- **Method:** `DELETE`
-- **Description:** Delete a user by their ID.
-- **Path Parameters:**
-  - `id` (long): The ID of the user to delete.
-- **Response:**
-  - **200 OK:** Confirmation message.
-
----
+### Delete User
+**DELETE /admin/users/{id}**
+- **Description**: Deletes a user by their ID.
+- **Path Variables**:
+  - `id` (long): ID of the user to delete.
+- **Response**:
+  - `200 OK`: Success message.
+- **Errors**:
+  - `404 Not Found`: User not found.
 
 ## HistoryController Endpoints
 
-### **Get History**
-- **URL:** `/history`
-- **Method:** `GET`
-- **Description:** Retrieve a list of all history records.
-- **Response:**
-  - **200 OK:** List of history records in JSON format.
+### Get History
+**GET /history**
+- **Description**: Retrieves the history of actions.
+- **Response**:
+  - `200 OK`: List of HistoryEntity objects.
 
-### **Clear History**
-- **URL:** `/history/clear`
-- **Method:** `DELETE`
-- **Description:** Clear all history records.
-- **Response:**
-  - **200 OK:** Confirmation message.
-
----
+### Clear History
+**DELETE /history/clear**
+- **Description**: Clears all history entries.
+- **Response**:
+  - `200 OK`: Success message.
 
 ## TaskController Endpoints
 
-### **Create Task**
-- **URL:** `/tasks/`
-- **Method:** `POST`
-- **Description:** Create a new task.
-- **Request Body:**
-  - TaskDto object containing task details (title, description, priority, etc.).
-- **Response:**
-  - **201 Created:** The created task details in JSON format.
+### Create Task
+**POST /tasks/**
+- **Description**: Creates a new task.
+- **Request Body**:
+  - TaskDto object containing task details.
+- **Response**:
+  - `201 Created`: Created TaskDto object.
+- **Errors**:
+  - `404 Not Found`: User not found.
 
-### **Get Task by ID**
-- **URL:** `/tasks/{id}`
-- **Method:** `GET`
-- **Description:** Retrieve a task by its ID.
-- **Path Parameters:**
-  - `id` (long): The ID of the task to retrieve.
-- **Response:**
-  - **200 OK:** Task details in JSON format.
+### Get Task by ID
+**GET /tasks/{id}**
+- **Description**: Retrieves a task by its ID.
+- **Path Variables**:
+  - `id` (long): ID of the task to retrieve.
+- **Response**:
+  - `200 OK`: TaskDto object containing task details.
+- **Errors**:
+  - `404 Not Found`: Task not found.
 
-### **Get All Tasks**
-- **URL:** `/tasks/`
-- **Method:** `GET`
-- **Description:** Retrieve a paginated list of all tasks.
-- **Query Parameters:**
-  - Standard pagination parameters (`page`, `size`).
-- **Response:**
-  - **200 OK:** A paginated list of tasks.
+### Get All Tasks
+**GET /tasks/**
+- **Description**: Retrieves a paginated list of all tasks.
+- **Query Parameters**:
+  - Pageable parameters.
+- **Response**:
+  - `200 OK`: Paginated list of TaskDto objects.
 
-### **Full Update Task**
-- **URL:** `/tasks/{id}`
-- **Method:** `PUT`
-- **Description:** Fully update a task.
-- **Path Parameters:**
-  - `id` (long): The ID of the task to update.
-- **Request Body:**
+### Update Task (Full)
+**PUT /tasks/{id}**
+- **Description**: Fully updates a task.
+- **Path Variables**:
+  - `id` (long): ID of the task to update.
+- **Request Body**:
   - TaskDto object containing updated task details.
-- **Response:**
-  - **200 OK:** Updated task details in JSON format.
+- **Response**:
+  - `200 OK`: Updated TaskDto object.
+- **Errors**:
+  - `404 Not Found`: Task not found.
 
-### **Partial Update Task**
-- **URL:** `/tasks/{id}`
-- **Method:** `PATCH`
-- **Description:** Partially update a task.
-- **Path Parameters:**
-  - `id` (long): The ID of the task to update.
-- **Request Body:**
-  - TaskDto object with partial updates.
-- **Response:**
-  - **200 OK:** Updated task details in JSON format.
+### Update Task (Partial)
+**PATCH /tasks/{id}**
+- **Description**: Partially updates a task.
+- **Path Variables**:
+  - `id` (long): ID of the task to update.
+- **Request Body**:
+  - Partial TaskDto object with fields to update.
+- **Response**:
+  - `200 OK`: Updated TaskDto object.
+- **Errors**:
+  - `404 Not Found`: Task not found.
 
-### **Delete Task**
-- **URL:** `/tasks/{id}`
-- **Method:** `DELETE`
-- **Description:** Delete a task by its ID.
-- **Path Parameters:**
-  - `id` (long): The ID of the task to delete.
-- **Response:**
-  - **200 OK:** Confirmation message.
+### Delete Task
+**DELETE /tasks/{id}**
+- **Description**: Deletes a task by its ID.
+- **Path Variables**:
+  - `id` (long): ID of the task to delete.
+- **Response**:
+  - `200 OK`: Success message.
+- **Errors**:
+  - `404 Not Found`: Task not found.
 
-### **Change Task Status**
-- **URL:** `/tasks/{id}/changestatus`
-- **Method:** `PUT`
-- **Description:** Change the status of a task.
-- **Path Parameters:**
-  - `id` (long): The ID of the task to update.
-- **Request Body:**
-  - JSON object containing the new status: `{ "status": "new_status" }`
-- **Response:**
-  - **200 OK:** Confirmation message.
+### Change Task Status
+**PUT /tasks/{id}/changestatus**
+- **Description**: Changes the status of a task.
+- **Path Variables**:
+  - `id` (long): ID of the task.
+- **Request Body**:
+  - JSON object with `status` field.
+- **Response**:
+  - `200 OK`: Success message.
+- **Errors**:
+  - `404 Not Found`: Task not found.
 
-### **Search Tasks**
-- **URL:** `/tasks/search`
-- **Method:** `GET`
-- **Description:** Search for tasks based on various criteria.
-- **Query Parameters:**
-  - `title` (String, optional): Search by task title.
-  - `description` (String, optional): Search by task description.
-  - `status` (String, optional): Search by task status.
-  - `dueDate` (Date, optional): Search by due date.
-  - `priority` (String, optional): Search by task priority.
-- **Response:**
-  - **200 OK:** List of tasks matching the criteria.
-
----
+### Search Tasks
+**GET /tasks/search**
+- **Description**: Searches tasks based on criteria.
+- **Query Parameters**:
+  - `title` (String, optional): Task title.
+  - `description` (String, optional): Task description.
+  - `status` (String, optional): Task status.
+  - `dueDate` (Date, optional): Task due date (yyyy-MM-dd).
+  - `priority` (String, optional): Task priority.
+- **Response**:
+  - `200 OK`: List of matching TaskDto objects.
 
 ## UserController Endpoints
 
-### **Authenticate User**
-- **URL:** `/users/authenticate`
-- **Method:** `POST`
-- **Description:** Authenticate a user.
-- **Request Body:**
-  - UserEntity object containing user credentials (username, password).
-- **Response:**
-  - **200 OK:** Authentication token.
+### Authenticate
+**POST /users/authenticate**
+- **Description**: Authenticates a user and returns a token.
+- **Request Body**:
+  - UserEntity object with `email` and `password`.
+- **Response**:
+  - `200 OK`: Authentication token.
+- **Errors**:
+  - `404 Not Found`: User not found.
 
-### **Register User**
-- **URL:** `/users/register`
-- **Method:** `POST`
-- **Description:** Register a new user.
-- **Request Body:**
-  - UserEntity object containing user details.
-- **Response:**
-  - **201 Created:** Details of the registered user.
+### Register
+**POST /users/register**
+- **Description**: Registers a new user.
+- **Request Body**:
+  - UserEntity object with user details.
+- **Response**:
+  - `201 Created`: Registered UserEntity object.
 
-### **Get Current User Profile**
-- **URL:** `/users/me`
-- **Method:** `GET`
-- **Description:** Retrieve the current user's profile.
-- **Response:**
-  - **200 OK:** Current user details in JSON format.
+### Get Profile
+**GET /users/me**
+- **Description**: Retrieves the profile of the currently authenticated user.
+- **Response**:
+  - `200 OK`: UserDto object containing user details.
+- **Errors**:
+  - `404 Not Found`: User not found.
 
-### **Full Update User**
-- **URL:** `/users/{id}`
-- **Method:** `PUT`
-- **Description:** Fully update user details.
-- **Path Parameters:**
-  - `id` (long): The ID of the user to update.
-- **Request Body:**
+### Update User (Full)
+**PUT /users/{id}**
+- **Description**: Fully updates a user.
+- **Path Variables**:
+  - `id` (long): ID of the user to update.
+- **Request Body**:
   - UserDto object with updated details.
-- **Response:**
-  - **200 OK:** Updated user details in JSON format.
+- **Response**:
+  - `200 OK`: Updated UserDto object.
+- **Errors**:
+  - `404 Not Found`: User not found.
 
-### **Partial Update User**
-- **URL:** `/users/{id}`
-- **Method:** `PATCH`
-- **Description:** Partially update user details.
-- **Path Parameters:**
-  - `id` (long): The ID of the user to update.
-- **Request Body:**
-  - UserDto object with partial updates.
-- **Response:**
-  - **200 OK:** Updated user details in JSON format.
+### Update User (Partial)
+**PATCH /users/{id}**
+- **Description**: Partially updates a user.
+- **Path Variables**:
+  - `id` (long): ID of the user to update.
+- **Request Body**:
+  - Partial UserDto object with fields to update.
+- **Response**:
+  - `200 OK`: Updated UserDto object.
+- **Errors**:
+  - `404 Not Found`: User not found.
 
----
+### Change Password
+**POST /change-password**
+- **Description**: Changes the password for a user.
+- **Request Body**:
+  - JSON object with `email`, `oldPassword`, and `newPassword` fields.
+- **Response**:
+  - `200 OK`: Success message.
+- **Errors**:
+  - `404 Not Found`: User not found.
+
+**Note**: This endpoint is available for both admins and users.
+
 
 
