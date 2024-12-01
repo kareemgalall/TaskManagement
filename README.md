@@ -1,7 +1,12 @@
 # Task Management System
 
 This guide outlines the steps to run the task management system
-- **Note:** admin user is inserted into the database when program runs 
+### Default Admin User
+When the application is first started, a default admin user is created with the following credentials:
+
+- **Email:** `admin@gmail.com`
+- **Password:** `123`
+
 ---
 
 ## Prerequisites
