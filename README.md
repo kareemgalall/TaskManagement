@@ -46,7 +46,10 @@ Ensure the following are installed and configured on your system:
      ```bash
      git --version
      ```
+     
+5. **Gmail Credentials**
 
+   - Obtain your Gmail email address and App Password.
 ---
 
 ## Clone the Repository
@@ -65,7 +68,20 @@ Ensure the following are installed and configured on your system:
    cd <project_name>
    ```
 
+## Configure Gmail SMTP in application.properties
 
+The application.properties file already includes placeholders for Gmail SMTP configuration. Update the placeholders with your credentials:
+
+```properties
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username={your_email@gmail.com}
+spring.mail.password={your_app_password}
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+```
+- Replace `{your_email@gmail.com}` with your Gmail address.
+- Replace `{your_app_password}` with your Gmail App Password.
 
 ## Run Database Using Docker Compose
 
