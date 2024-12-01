@@ -7,7 +7,7 @@ When the application is first started, a default admin user is created with the 
 - **Email:** `admin@gmail.com`
 - **Password:** `123`
 
-it's recommonded to change admin password directly using the change-password endpoint provided
+  it's recommonded to change admin password directly using the change-password endpoint provided
 ---
 
 ## Prerequisites
