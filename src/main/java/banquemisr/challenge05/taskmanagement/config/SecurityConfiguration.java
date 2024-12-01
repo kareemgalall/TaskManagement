@@ -37,6 +37,7 @@ public class SecurityConfiguration {
                     registry.requestMatchers( "/users/register", "/users/authenticate").permitAll();
                     registry.requestMatchers("/admin/users/**").hasRole("ADMIN");
                     registry.requestMatchers("/tasks/**","/users/**").hasRole("USER");
+                    registry.requestMatchers("/change-password").hasAnyRole("ADMIN","USER");
                     registry.anyRequest().authenticated();
                 })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

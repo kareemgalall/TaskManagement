@@ -33,6 +33,7 @@ public class TaskManagementApplication {
         user.setEmail("admin@gmail.com");
         user.setPassword("$2a$10$gn/xPjpjqqeb2XWa.dumau1ymf5CYmcZZKWBLlYHDMgjgr9OBPdCS");
         user.setRole("ADMIN");
+        System.out.println("admin user created");
         userService.save(user);
     }
 }

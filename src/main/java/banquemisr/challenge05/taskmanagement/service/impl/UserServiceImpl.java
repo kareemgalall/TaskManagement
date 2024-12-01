@@ -108,5 +108,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    public void changePassword(String email, String oldPassword, String newPassword) throws UserNotFoundException {
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new IllegalArgumentException("Invalid old password.");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
 
 }

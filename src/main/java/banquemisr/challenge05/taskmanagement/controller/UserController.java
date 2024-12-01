@@ -1,6 +1,7 @@
 package banquemisr.challenge05.taskmanagement.controller;
 
 import banquemisr.challenge05.taskmanagement.domain.model.UserEntity;
+import banquemisr.challenge05.taskmanagement.dto.ChangePasswordRequest;
 import banquemisr.challenge05.taskmanagement.dto.UserDto;
 import banquemisr.challenge05.taskmanagement.exception.AuthorizationException;
 import banquemisr.challenge05.taskmanagement.exception.PasswordInCorrectException;
@@ -51,4 +52,11 @@ public class UserController {
         UserEntity updatedUser=userService.partialUpdate(id,userEntity);
         return new ResponseEntity<>(modelMapper.mapFrom(updatedUser), HttpStatus.OK);
     }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request) throws UserNotFoundException {
+        userService.changePassword(request.getEmail(), request.getOldPassword(), request.getNewPassword());
+        return ResponseEntity.ok("Password changed successfully.");
+    }
+
 }
