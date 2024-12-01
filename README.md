@@ -117,7 +117,7 @@ Ensure the following are installed and configured on your system:
 # API Documentation
 
 This document provides an overview of the API endpoints available in the Task Management System. Each endpoint includes its HTTP method, endpoint URL, request parameters, and response details.
-
+- **Note:** admin user is set into the database when program runs 
 ---
 
 ## AdminController Endpoints
